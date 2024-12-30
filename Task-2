@@ -1,0 +1,94 @@
+import java.util.Scanner;
+import java.util.HashMap;
+
+public class StudentGradeTracker {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        HashMap<String, Double> grades = new HashMap<>();
+        boolean running = true;
+
+        System.out.println("Welcome to the Student Grade Manager!");
+
+        while (running) {
+            System.out.println("\nMenu:");
+            System.out.println("1. Add grade");
+            System.out.println("2. View grades");
+            System.out.println("3. Calculate average grade");
+            System.out.println("4. Display overall grade");
+            System.out.println("5. Exit");
+            System.out.print("Enter your choice: ");
+            int choice = scanner.nextInt();
+            scanner.nextLine(); // Consume newline
+
+            switch (choice) {
+                case 1: // Add grade
+                    System.out.print("Enter subject name: ");
+                    String subject = scanner.nextLine();
+                    System.out.print("Enter grade (0-100): ");
+                    double grade = scanner.nextDouble();
+                    if (grade >= 0 && grade <= 100) {
+                        grades.put(subject, grade);
+                        System.out.println("Grade added successfully.");
+                    } else {
+                        System.out.println("Invalid grade. Please enter a value between 0 and 100.");
+                    }
+                    break;
+
+                case 2: // View grades
+                    if (grades.isEmpty()) {
+                        System.out.println("No grades available.");
+                    } else {
+                        System.out.println("Grades:");
+                        grades.forEach((key, value) -> System.out.println(key + ": " + value));
+                    }
+                    break;
+
+                case 3: // Calculate average grade
+                    if (grades.isEmpty()) {
+                        System.out.println("No grades available to calculate average.");
+                    } else {
+                        double average = grades.values().stream().mapToDouble(Double::doubleValue).average().orElse(0);
+                        System.out.printf("Average Grade: %.2f%n", average);
+                    }
+                    break;
+
+                case 4: // Display overall grade
+                    if (grades.isEmpty()) {
+                        System.out.println("No grades available to display overall grade.");
+                    } else {
+                        double average = grades.values().stream().mapToDouble(Double::doubleValue).average().orElse(0);
+                        System.out.printf("Average Grade: %.2f%n", average);
+                        System.out.println("Letter Grade: " + getLetterGrade(average));
+                        System.out.println("GPA: " + calculateGPA(average));
+                    }
+                    break;
+
+                case 5: // Exit
+                    System.out.println("Exiting... Goodbye!");
+                    running = false;
+                    break;
+
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+        }
+
+        scanner.close();
+    }
+
+    private static String getLetterGrade(double average) {
+        if (average >= 90) return "A";
+        else if (average >= 80) return "B";
+        else if (average >= 70) return "C";
+        else if (average >= 60) return "D";
+        else return "F";
+    }
+
+    private static double calculateGPA(double average) {
+        if (average >= 90) return 4.0;
+        else if (average >= 80) return 3.0;
+        else if (average >= 70) return 2.0;
+        else if (average >= 60) return 1.0;
+        else return 0.0;
+    }
+}
